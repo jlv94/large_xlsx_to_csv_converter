@@ -69,3 +69,8 @@ excel-to-csv-converter/
 ├── csv/                  # Output CSV files
 └── done/                 # Processed Excel files
 ```
+
+### Test python script
+1. Download and unzip a large file such as: 'Online Retail II' https://archive.ics.uci.edu/dataset/502/online+retail+ii
+2. Save excel file in ./tmp
+3. Run script
