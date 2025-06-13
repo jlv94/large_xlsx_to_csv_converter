@@ -44,7 +44,7 @@ Create the following folders in your project directory (or specify custom paths 
 ### Run the script:
 
 ```
-python converter.py --input_folder tmp --output_folder csv --done_folder done --chunk_size 50000
+python converter.py
 ```
 
 **Select file:**
@@ -53,16 +53,9 @@ The script will list all .xlsx files in the input folder and prompt you to selec
 **Conversion:**
 The script reads the file in chunks, concatenates the data, exports it as CSV, and moves the original Excel file to the done folder.
 
-### Command-line Arguments
-Argument	Description	Default
-`--input_folder`	Folder containing Excel files	tmp
-`--output_folder`	Folder to save CSV files	csv
-`--done_folder`	Folder to move processed Excel files	done
-`--chunk_size`	Number of rows per chunk to read	50000
-
 Example
 ```
-python converter.py --input_folder tmp --output_folder csv --done_folder done --chunk_size 100000
+python converter.py
 ```
 
 ### Project Structure
