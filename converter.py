@@ -155,10 +155,12 @@ def readExcelFile(file_path, file_name, start=None, n=0):
 	
 	return df
 
+
 def moveFileTmpToDone(file_path, file_ext):
 	"""This function moves the Excel file that has been converted into CSV from the tmp folder into the done folder."""
 	
 	shutil.move(file_path, os.path.join(done_folder, file_ext))
+
 
 def main():
 	"""This is the main function."""
@@ -184,6 +186,7 @@ def main():
 	print('\n\n########## END OF SCRIPT ##########')
 
 	exit()
+
 
 if __name__ == '__main__':
 	main()
