@@ -75,7 +75,17 @@ def getFiles():
 		return file_path, file_ext, file_name
 
 
-def readExcelFile(file_path, file_name, start=None, n=0):
+def fileNumberSheet(file_path):
+	"""This function returns the number of sheet in the Excel file"""
+
+	xls = pd.ExcelFile(file_path)
+	n_sheets = len(xls.sheet_names)
+	print(f'Total number of sheet in file: {n_sheets}')
+
+	return n_sheets
+
+
+def readExcelFile(file_path, file_name, start=None, n=0, sheet_number=0):
 	"""This function initializes a list of chunks then reads n rows of Excel files and appends them together."""
 	
 	#Confirming parameters
@@ -124,8 +134,8 @@ def readExcelFile(file_path, file_name, start=None, n=0):
 
 	# Read the first chunk to get the column names
 	print(f'\n##### Script starts reading and appending the Excel File: {file_name}')
-	
-	df = pd.read_excel(file_path, engine='openpyxl', skiprows=start_row, nrows=n)
+
+	df = pd.read_excel(file_path, engine='openpyxl', skiprows=start_row, nrows=n, sheet_name=sheet_number)
 	chunks.append(df)
 
 	print(f'\t{color_continuing}Continuing {'.' *5} {color_reset}Starting at line {start_row}. First chunk of {n} rows read and appended')
@@ -136,7 +146,7 @@ def readExcelFile(file_path, file_name, start=None, n=0):
 	# Loop to read the remaining chunks
 	while True:
 		try:
-			chunk = pd.read_excel(file_path, engine='openpyxl', skiprows=start_row, nrows=n, header=None)
+			chunk = pd.read_excel(file_path, engine='openpyxl', skiprows=start_row, nrows=n, header=None, sheet_name=sheet_number)
 
 			if chunk.empty:
 				break
@@ -172,12 +182,17 @@ def main():
 	print('\n\n########## START OF SCRIPT ##########')
 
 	file_path, file_ext, file_name = getFiles()
-	df = readExcelFile(file_path, file_name, start=0, n=50000)
 
-	print(f'\nExporting CSV file {'.' *5}')
-	df.to_csv(os.path.join(csv_folder, f'{file_name}.csv'), index=False)
+	n_sheets = fileNumberSheet(file_path)
+
+	for sheet in range(0, n_sheets):
+		print(f'\nStart sheet {sheet}')
+		df = readExcelFile(file_path, file_name, start=0, n=50000, sheet_number=sheet)
+
+		print(f'\nExporting CSV file {'.' *5}')
+		df.to_csv(os.path.join(csv_folder, f'{file_name}_{sheet}.csv'), index=False)
 	
-	print(f'\t{color_continuing}Continuing {'.' *5} {color_reset}The CSV file has been exported and is to be found in folder ./csv/{file_name}.csv')
+		print(f'\t{color_continuing}Continuing {'.' *5} {color_reset}The CSV file has been exported and is to be found in folder ./csv/{file_name}_{sheet}.csv')
 
 	print(f'\nMoving Excel file {'.' *5}')
 	moveFileTmpToDone(file_path, file_ext)
